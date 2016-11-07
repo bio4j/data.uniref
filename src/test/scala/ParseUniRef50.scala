@@ -16,10 +16,10 @@ class ParseUniRef50 extends FunSuite {
 
     xml.entries.fromLines(lines) foreach { e =>
 
-      println { s"id: ${e.ID}" }
-      println { s"seed id: ${e.seedID}" }
-      println { s"representative id: ${e.representativeID}" }
-      println { s"non-representative member ids: ${e.nonRepresentativeMemberIDs}" }
+      val ID = e.ID
+      val seedID = e.seedID
+      val representativeID = e.representativeID
+      val nonRepresentativeMemberIDs = e.nonRepresentativeMemberIDs
     }
   }
 
