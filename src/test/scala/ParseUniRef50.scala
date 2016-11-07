@@ -1,7 +1,7 @@
 package bio4j.data.uniref.test
 
 import org.scalatest.FunSuite
-
+import bio4j.test.ReleaseOnlyTest
 import com.bio4j.data.uniref._
 
 class ParseUniRef50 extends FunSuite {
@@ -24,7 +24,7 @@ class ParseUniRef50 extends FunSuite {
   }
 
   // this parses ~15*10^4 entries
-  test("parse big fragment, access all data") {
+  test("parse big fragment, access all data", ReleaseOnlyTest) {
 
     xml.entries.fromLines(bigLines) foreach { e =>
 
