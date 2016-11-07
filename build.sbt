@@ -20,5 +20,10 @@ dependencyOverrides := Set (
   "org.scala-lang.modules" %% "scala-xml"     % "1.0.5"
 )
 
+
+wartremoverExcluded ++= Seq(
+  baseDirectory.value/"src"/"main"/"scala"/"xml"/"parsers.scala"
+)
+
 testOptions       in Test += Tests.Argument("-oD")
 parallelExecution in Test := false

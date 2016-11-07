@@ -19,3 +19,6 @@ data/out/
 .atom*
 .ensime*
 .idea*
+
+# uniref big file
+uniref50.xml

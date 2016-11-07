@@ -12,11 +12,11 @@ case class Entry(val xml: Elem) extends AnyVal with AnyCluster {
   def ID: String =
     xml \ "@id" text
 
-  def representativeID: String =
+  def representativeID: Option[String] =
     (xml \ "representativeMember" \ "dbReference" \ "property" )
       .filter( isUniProtAccessionProperty )
       .map( _ \ "@value" text )
-      .head
+      .headOption
 
   def nonRepresentativeMemberIDs: Seq[String] =
     nonRepresentativeMembers
@@ -25,15 +25,14 @@ case class Entry(val xml: Elem) extends AnyVal with AnyCluster {
         .map(_ \ "@value" text)
       )
 
-  def seedID: String =
+  def seedID: Option[String] =
     if( (xml \ "representativeMember" \ "dbReference" \ "property") exists isSeed  )
       representativeID
     else
-      accession(
-        nonRepresentativeMembers
-          .filter( member => (member \ "property") exists isSeed )
-          .head
-      )
+      nonRepresentativeMembers
+        .filter( member => (member \ "property") exists isSeed )
+        .headOption
+        .flatMap(accession)
 
   private def isUniProtDBReference(dbRef: Node): Boolean =
     (dbRef \ "@type" text) == "UniProtKB ID"
@@ -47,6 +46,6 @@ case class Entry(val xml: Elem) extends AnyVal with AnyCluster {
   private def nonRepresentativeMembers =
     (xml \ "member" \ "dbReference") filter isUniProtDBReference
 
-  private def accession(dbRef: Node): String =
-    (dbRef \ "property").filter(isUniProtAccessionProperty).head text
+  private def accession(dbRef: Node): Option[String] =
+    (dbRef \ "property").filter(isUniProtAccessionProperty).headOption.map(_.text)
 }
