@@ -1,0 +1,5 @@
+First release.
+
+- The ADT is confusing, with no documentation: Options normally mean that something is not coming from UniProt
+- no docs
+- no real correctness tests
