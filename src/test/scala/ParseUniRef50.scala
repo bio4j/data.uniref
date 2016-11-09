@@ -16,10 +16,16 @@ class ParseUniRef50 extends FunSuite {
 
     xml.entries.fromLines(lines) foreach { e =>
 
-      val ID = e.ID
-      val seedID = e.seedID
-      val representativeID = e.representativeID
-      val nonRepresentativeMemberIDs = e.nonRepresentativeMemberIDs
+      val id = e.ID
+
+      val seed    = e.seed
+      val seedID  = seed.id
+
+      val representative    = e.representative
+      val representativeID  = representative.id
+
+      val nonRepresentativeMembers    = e.nonRepresentativeMembers
+      val nonRepresentativeMembersIDs = nonRepresentativeMembers map { _.id }
     }
   }
 
@@ -28,10 +34,16 @@ class ParseUniRef50 extends FunSuite {
 
     xml.entries.fromLines(bigLines) foreach { e =>
 
-      val ID = e.ID
-      val seedID = e.seedID
-      val representativeID = e.representativeID
-      val nonRepresentativeMemberIDs = e.nonRepresentativeMemberIDs
+      val id = e.ID
+
+      val seed    = e.seed
+      val seedID  = seed.id
+
+      val representative    = e.representative
+      val representativeID  = representative.id
+
+      val nonRepresentativeMembers    = e.nonRepresentativeMembers
+      val nonRepresentativeMembersIDs = nonRepresentativeMembers map { _.id }
     }
   }
 
