@@ -1,0 +1,1 @@
+This release fixes the ADT and XML implementation, adding full support for UniParc members.
