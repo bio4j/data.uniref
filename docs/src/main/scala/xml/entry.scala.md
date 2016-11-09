@@ -17,42 +17,49 @@ case class Entry(val xml: Elem) extends AnyVal with AnyCluster {
   def ID: String =
     xml \ "@id" text
 
-  def representativeID: Option[String] =
-    (xml \ "representativeMember" \ "dbReference" \ "property" )
-      .filter( isUniProtAccessionProperty )
-      .map( _ \ "@value" text )
-      .headOption
+  def representative: ClusterMember =
+    dbRefToClusterMember(representativedbRef)
 
-  def nonRepresentativeMemberIDs: Seq[String] =
-    nonRepresentativeMembers
-      .flatMap( dbRef =>
-        (dbRef \ "property").filter(isUniProtAccessionProperty)
-        .map(_ \ "@value" text)
+  def seed: ClusterMember =
+    if(dbRefIsSeed(representativedbRef))
+      representative
+    else
+      dbRefToClusterMember(
+        nonRepresentativeMembersdbRefs
+          .filter(dbRefIsSeed)
+          .head
       )
 
-  def seedID: Option[String] =
-    if( (xml \ "representativeMember" \ "dbReference" \ "property") exists isSeed  )
-      representativeID
+  def nonRepresentativeMembers: Seq[ClusterMember] =
+    nonRepresentativeMembersdbRefs map dbRefToClusterMember
+
+  private def dbRefToClusterMember(dbRef: Node): ClusterMember = {
+
+    val id = dbRef \ "@id" text
+
+    if(isUniProtDBReference(dbRef))
+      UniProtProtein(id)
     else
-      nonRepresentativeMembers
-        .filter( member => (member \ "property") exists isSeed )
-        .headOption
-        .flatMap(accession)
+      UniParcProtein(id)
+  }
 
   private def isUniProtDBReference(dbRef: Node): Boolean =
     (dbRef \ "@type" text) == "UniProtKB ID"
 
-  private def isUniProtAccessionProperty(property: Node): Boolean =
-    (property \ "@type" text) == "UniProtKB accession"
+  private def isUniParcDBReference(dbRef: Node): Boolean =
+    (dbRef \ "@type" text) == "UniParc ID"
+
+  private def dbRefIsSeed(dbRef: Node): Boolean =
+    (dbRef \ "property") exists isSeed
 
   private def isSeed(property: Node): Boolean =
     (property \ "@type" text) == "isSeed"
 
-  private def nonRepresentativeMembers =
-    (xml \ "member" \ "dbReference") filter isUniProtDBReference
+  private def representativedbRef: Node =
+    xml \ "representativeMember" \ "dbReference" head
 
-  private def accession(dbRef: Node): Option[String] =
-    (dbRef \ "property").filter(isUniProtAccessionProperty).headOption.map(_.text)
+  private def nonRepresentativeMembersdbRefs =
+    (xml \ "member" \ "dbReference")
 }
 
 ```
