@@ -16,7 +16,7 @@ class ParseUniRef50 extends FunSuite {
 
     xml.entries.fromLines(lines) foreach { e =>
 
-      val ID = e.ID
+      val id = e.ID
 
       val seed    = e.seed
       val seedID  = seed.id
@@ -34,7 +34,7 @@ class ParseUniRef50 extends FunSuite {
 
     xml.entries.fromLines(bigLines) foreach { e =>
 
-      val ID = e.ID
+      val id = e.ID
 
       val seed    = e.seed
       val seedID  = seed.id
